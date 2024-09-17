@@ -1,0 +1,12 @@
+.central-window {
+    &::-webkit-scrollbar {
+        width: 0;
+        background: transparent; /* Optional: just to make the scrollbar invisible */
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    & {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+}

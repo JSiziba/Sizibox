@@ -1,0 +1,70 @@
+@if (fileDetails.type === FileType.FOLDER) {
+    <div class="flex flex-col gap-3 h-44 w-40 justify-center bg-transparent hover:bg-gray-100 transition px-5 py-3 rounded-lg cursor-pointer group">
+        <div class="flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-12 h-12 group-hover:hidden transition duration-200"
+                 stroke="currentColor"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M20 5h-9.586L8.707 3.293A.997.997 0 0 0 8 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2z"></path>
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-12 h-12 hidden group-hover:inline-block transition duration-200"
+                 stroke="currentColor"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M2.165 19.551c.186.28.499.449.835.449h15c.4 0 .762-.238.919-.606l3-7A.998.998 0 0 0 21 11h-1V8c0-1.103-.897-2-2-2h-6.655L8.789 4H4c-1.103 0-2 .897-2 2v13h.007a1 1 0 0 0 .158.551zM18 8v3H6c-.4 0-.762.238-.919.606L4 14.129V8h14z"></path>
+            </svg>
+
+        </div>
+        <p class="text-center text-xs font-semibold text-steelBlue">{{ fileDetails.name }}</p>
+    </div>
+}
+@else if (fileDetails.type === FileType.IMAGE) {
+    <div class="h-44 w-40 relative cursor-pointer rounded-lg shadow-sm overflow-hidden">
+        <img class="object-cover" [ngSrc]="getDownloadPath(fileDetails.path)" fill [alt]="fileDetails.name"/>
+        <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 hover:bg-opacity-85 flex flex-col justify-between group">
+            <div class="flex-grow flex items-center p-3 justify-between">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="text-white w-5 h-5"
+                     stroke="currentColor"
+                     fill="currentColor"
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24">
+                    <path d="M19.999 4h-16c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm-13.5 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5.5 10h-7l4-5 1.5 2 3-4 5.5 7h-7z"></path>
+                </svg>
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="text-white w-5 h-5"
+                     stroke="currentColor"
+                     fill="currentColor"
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24">
+                    <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                </svg>
+
+            </div>
+            <div class="flex flex-grow justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     stroke="currentColor"
+                     class="text-gray-300 h-12 w-12 invisible group-hover:visible transition duration-300"
+                     fill="currentColor"
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24">
+                    <path d="m21 15.344-2.121 2.121-3.172-3.172-1.414 1.414 3.172 3.172L15.344 21H21zM3 8.656l2.121-2.121 3.172 3.172 1.414-1.414-3.172-3.172L8.656 3H3zM21 3h-5.656l2.121 2.121-3.172 3.172 1.414 1.414 3.172-3.172L21 8.656zM3 21h5.656l-2.121-2.121 3.172-3.172-1.414-1.414-3.172 3.172L3 15.344z"></path>
+                </svg>
+            </div>
+            <div class="flex items-center flex-grow overflow-hidden p-3">
+                <p class="text-white text-xs font-light overflow-ellipsis">{{ fileDetails.name }}</p>
+            </div>
+        </div>
+    </div>
+}
