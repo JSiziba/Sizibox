@@ -37,15 +37,15 @@ public class FilesService {
             }
         }
 
-        fileDetailsList.sort((f1, f2) -> {
-            if (f1.getType().equals("Folder") && f2.getType().equals("File")) {
-                return -1;
-            } else if (f1.getType().equals("File") && f2.getType().equals("Folder")) {
-                return 1;
-            } else {
-                return f1.getName().compareTo(f2.getName());
-            }
-        });
+//        fileDetailsList.sort((f1, f2) -> {
+//            if (f1.getType().equals("Folder") && f2.getType().equals("File")) {
+//                return -1;
+//            } else if (f1.getType().equals("File") && f2.getType().equals("Folder")) {
+//                return 1;
+//            } else {
+//                return f1.getName().compareTo(f2.getName());
+//            }
+//        });
 
         return fileDetailsList;
     }
