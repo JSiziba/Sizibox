@@ -1,20 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { FolderPath } from '../models/folder-path';
 import { FileDetails } from '../models/file-details';
 import { FileType } from '../models/file-type';
+import { CentralStoreService } from './central-store.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HttpUtilsService {
-    public readonly baseUrl = "http://localhost:7521"
+    // public readonly baseUrl = "http://localhost:7521"
+    public readonly baseUrl = "http://192.168.100.10:5000"
 
-    constructor(private http: HttpClient) { }
+
+    constructor(
+        private http: HttpClient,
+        private centralStore: CentralStoreService
+    ) { }
 
     public getFolderPaths(): Observable<FolderPath[]> {
-        return this.http.get<FolderPath[]>(`${this.baseUrl}/folder-paths`);
+        return this.http.get<FolderPath[]>(`${this.baseUrl}/folder-paths`).pipe(
+            tap((folders) => {
+                folders.length > 0 && this.centralStore.folderPaths$.next(folders);
+            })
+        );
     }
 
     public getFilesInFolder(folderPath: string): Observable<FileDetails[]> {
@@ -50,4 +60,13 @@ export class HttpUtilsService {
     // rename file
 
     // delete file
+    public getDownloadPath(path: string) {
+        const pathEncoded = encodeURIComponent(path);
+        return `${this.baseUrl}/media-server/download?path=${pathEncoded}`;
+    }
+
+    public getStreamPath(path: string) {
+        const pathEncoded = encodeURIComponent(path);
+        return `${this.baseUrl}/media-server/stream-media?path=${pathEncoded}`;
+    }
 }

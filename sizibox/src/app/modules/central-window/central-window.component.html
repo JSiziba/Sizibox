@@ -1,3 +1,7 @@
-<div class="h-full p-6 overflow-y-auto flex gap-8 justify-between flex-wrap central-window">
-    <app-file-card class="flex-grow" *ngFor="let file of files" [fileDetails]="file"></app-file-card>
+<div class="h-full p-6 overflow-y-auto flex gap-2 gap-y-14 flex-wrap central-window">
+    <app-file-card (fileClicked)="onFileClicked($event)" class="" *ngFor="let file of files" [fileDetails]="file"></app-file-card>
 </div>
+
+<app-media-player (close)="showMediaPlayer = false"
+                  *ngIf="showMediaPlayer && selectedFile"
+                  [fileDetails]="selectedFile"></app-media-player>

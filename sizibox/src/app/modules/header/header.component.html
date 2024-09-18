@@ -6,8 +6,11 @@
             <img class="h-[12px] w-[12px]" ngSrc="assets/images/icon_clear.svg" width="24" height="24" alt="clear"/>
         </button>
         <div class="flex gap-1 items-center text-darkEbony font-bold text-xs">
-            <span>/home</span>
-            <span class="cursor-pointer underline text-steelBlue">/t-1000</span>
+            <span class="cursor-pointer" (click)="clearBreadcrumbs()">/{{ (centralStoreService.selectedFolderPath$ | async)?.name }}</span>
+            <span *ngIf="breadcrumbs.length > 5" class="">...</span>
+            <span [title]="entry.name" (click)="navigateToBreadcrumbsEntry(entry)" *ngFor="let entry of breadcrumbs | slice:-5" class="cursor-pointer underline text-steelBlue">
+                /{{ entry.name.slice(0, 8) }}
+            </span>
         </div>
     </div>
     <div class="border border-steelBlue h-[2.5rem] w-[23rem] rounded-lg flex items-center px-4 gap-3 focus-within:shadow-xl focus-within:rounded-3xl transition-all duration-300">

@@ -1,0 +1,32 @@
+<div class="absolute left-0 top-0 w-screen h-screen overflow-hidden bg-black z-20" (mousemove)="onMouseMove()">
+    <div class="h-full w-full relative flex items-center justify-center text-white font-semibold text-2xl">
+        <div *ngIf="countDownTimer" class="h-12 bg-blue-950 bg-opacity-65 absolute left-0 top-0 w-screen z-30 px-12 flex items-center justify-between">
+            <span (click)="closeClicked()" class="text-gray-400 rounded shadow text-lg font-medium cursor-pointer px-5 py-1 border border-gray-400 bg-transparent hover:bg-white hover:text-steelBlue">Close</span>
+            <a [href]="downloadPath" [download]="fileDetails.name">
+                <span (click)="downloadClicked()" class="text-gray-400 rounded shadow text-lg font-medium cursor-pointer px-5 py-1 border border-gray-400 bg-transparent hover:bg-white hover:text-steelBlue">Download</span>
+            </a>
+        </div>
+        @if (fileDetails.type === FileType.VIDEO) {
+            <video class="w-full h-full" controls>
+                <source src="{{ streamPath }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        }
+        @else if (fileDetails.type === FileType.AUDIO) {
+            <audio class="w-full h-full" controls>
+                <source src="{{ streamPath }}" type="audio/mpeg">
+                Your browser does not support the audio tag.
+            </audio>
+        }
+        @else if (fileDetails.type === FileType.IMAGE) {
+            <img class="" src="{{ downloadPath }}" alt="{{ fileDetails.name }}">
+        }
+        @else {
+            <p>Media type not supported.</p>
+        }
+<!--        @else if (fileDetails.type === FileType.PDF){-->
+<!--            <iframe class="w-full h-full" src="{{ fileStreamPath }}" frameborder="0"></iframe>-->
+<!--        }-->
+
+    </div>
+</div>

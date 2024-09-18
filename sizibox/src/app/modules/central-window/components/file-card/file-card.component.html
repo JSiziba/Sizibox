@@ -1,9 +1,18 @@
 @if (fileDetails.type === FileType.FOLDER) {
-    <div class="flex flex-col gap-3 h-44 w-40 justify-center bg-transparent hover:bg-gray-100 transition px-5 py-3 rounded-lg cursor-pointer group">
+    <div (click)="onFileClick()" class="overflow-hidden flex flex-col gap-3 h-full w-60 justify-center bg-transparent hover:bg-gray-100 transition px-5 py-3 rounded-lg cursor-pointer group relative">
+        <button class="absolute top-2 right-2 hidden group-hover:inline-block transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
         <div class="flex justify-center">
             <svg xmlns="http://www.w3.org/2000/svg"
-                 class="text-cyan w-12 h-12 group-hover:hidden transition duration-200"
-                 stroke="currentColor"
+                 class="text-cyan w-24 h-24 group-hover:hidden transition duration-200"
                  fill="currentColor"
                  width="24"
                  height="24"
@@ -12,8 +21,7 @@
             </svg>
 
             <svg xmlns="http://www.w3.org/2000/svg"
-                 class="text-cyan w-12 h-12 hidden group-hover:inline-block transition duration-200"
-                 stroke="currentColor"
+                 class="text-cyan w-24 h-24 hidden group-hover:inline-block transition duration-200"
                  fill="currentColor"
                  width="24"
                  height="24"
@@ -26,45 +34,258 @@
     </div>
 }
 @else if (fileDetails.type === FileType.IMAGE) {
-    <div class="h-44 w-40 relative cursor-pointer rounded-lg shadow-sm overflow-hidden">
-        <img class="object-cover" [ngSrc]="getDownloadPath(fileDetails.path)" fill [alt]="fileDetails.name"/>
-        <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 hover:bg-opacity-85 flex flex-col justify-between group">
-            <div class="flex-grow flex items-center p-3 justify-between">
+    <div (click)="onFileClick()" class="w-60 cursor-pointer flex flex-col gap-3 overflow-hidden p-2 hover:bg-mystic hover:shadow-sm rounded-xl hover:bg-opacity-45 group relative">
+        <button class="absolute top-3 right-3 hidden group-hover:inline-block transition-all duration-200 bg-white z-10 p-3 bg-opacity-65 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
+        <div class="h-36 bg-gray-200 rounded-lg relative overflow-hidden border-2 border-gray-200 shadow">
+            <img class="object-cover w-full h-full" [src]="getDownloadPath(fileDetails.path)"  [alt]="fileDetails.name"/>
+        </div>
+        <div class="flex gap-3 px-1">
+            <div class="p-2 bg-blue-950 rounded-full h-fit">
                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="text-white w-5 h-5"
-                     stroke="currentColor"
+                     class="text-white w-6 h-6"
                      fill="currentColor"
                      width="24"
                      height="24"
                      viewBox="0 0 24 24">
                     <path d="M19.999 4h-16c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm-13.5 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5.5 10h-7l4-5 1.5 2 3-4 5.5 7h-7z"></path>
                 </svg>
-
+            </div>
+            <p class="text-gray-600 font-medium text-sm line-clamp-2 w-full" [title]="fileDetails.name">{{ fileDetails.name }}</p>
+        </div>
+        <div class="flex gap-1 text-xs font-medium text-gray-500 px-1 mb-3">
+            <p>{{ fileDetails.size }}</p>
+            <span class="font-bold">-</span>
+            <p>{{ fileDetails.lastModified | timeAgo }}</p>
+        </div>
+</div>
+} @else if (fileDetails.type === FileType.VIDEO) {
+    <div (click)="onFileClick()" class="w-60 cursor-pointer flex flex-col gap-3 overflow-hidden p-2 hover:bg-mystic hover:shadow-sm rounded-xl hover:bg-opacity-45 group relative">
+        <button class="absolute top-3 right-3 hidden group-hover:inline-block transition-all duration-200 bg-white z-10 p-3 bg-opacity-65 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
+        <div class="h-36 bg-gray-200 rounded-lg relative overflow-hidden border-2 border-gray-200 shadow">
+            <video class="object-cover h-full w-full" (mouseenter)="onVideoHover($event)" (mouseleave)="videoUnHover($event)">
+                <source [src]="getStreamPath(fileDetails.path) + '#t=0.5'">
+            </video>
+        </div>
+        <div class="flex gap-3 px-1">
+            <div class="p-2 bg-blue-950 rounded-full h-fit">
                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="text-white w-5 h-5"
-                     stroke="currentColor"
+                     class="text-white w-6 h-6"
                      fill="currentColor"
                      width="24"
                      height="24"
                      viewBox="0 0 24 24">
-                    <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
-                </svg>
-
-            </div>
-            <div class="flex flex-grow justify-center items-center">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     stroke="currentColor"
-                     class="text-gray-300 h-12 w-12 invisible group-hover:visible transition duration-300"
-                     fill="currentColor"
-                     width="24"
-                     height="24"
-                     viewBox="0 0 24 24">
-                    <path d="m21 15.344-2.121 2.121-3.172-3.172-1.414 1.414 3.172 3.172L15.344 21H21zM3 8.656l2.121-2.121 3.172 3.172 1.414-1.414-3.172-3.172L8.656 3H3zM21 3h-5.656l2.121 2.121-3.172 3.172 1.414 1.414 3.172-3.172L21 8.656zM3 21h5.656l-2.121-2.121 3.172-3.172-1.414-1.414-3.172 3.172L3 15.344z"></path>
+                    <path d="M18 7c0-1.103-.897-2-2-2H4c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-3.333L22 17V7l-4 3.333V7z"></path>
                 </svg>
             </div>
-            <div class="flex items-center flex-grow overflow-hidden p-3">
-                <p class="text-white text-xs font-light overflow-ellipsis">{{ fileDetails.name }}</p>
-            </div>
+            <p class="text-gray-600 font-medium text-sm line-clamp-2 w-full" [title]="fileDetails.name">{{ fileDetails.name }}</p>
+        </div>
+        <div class="flex gap-1 text-xs font-medium text-gray-500 px-1 mb-3">
+            <p>{{ fileDetails.size }}</p>
+            <span class="font-bold">-</span>
+            <p>{{ fileDetails.lastModified | timeAgo }}</p>
         </div>
     </div>
+} @else if (fileDetails.type === FileType.AUDIO) {
+    <div (click)="onFileClick()" class="flex flex-col gap-3 h-full w-60 justify-center bg-transparent hover:bg-gray-100 transition-all duration-200 px-5 py-3 rounded-lg cursor-pointer group relative">
+        <button class="absolute top-2 right-2 hidden group-hover:inline-block transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
+        <div class="flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 group-hover:hidden transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M6 18.573c2.206 0 4-1.794 4-4V4.428L19 7.7v7.43a3.953 3.953 0 0 0-2-.557c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4V7a.998.998 0 0 0-.658-.939l-11-4A.999.999 0 0 0 8 3v8.13a3.953 3.953 0 0 0-2-.557c-2.206 0-4 1.794-4 4s1.794 4 4 4z"></path>
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 hidden group-hover:inline-block transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path>
+                <path d="m9 17 8-5-8-5z"></path>
+            </svg>
+
+        </div>
+        <p class="text-center text-xs font-semibold text-steelBlue">{{ fileDetails.name }}</p>
+    </div>
 }
+@else if (fileDetails.type === FileType.DOCUMENT) {
+    <div (click)="onFileClick()" class="overflow-hidden flex flex-col gap-3 h-full w-60 justify-center bg-transparent hover:bg-gray-100 transition-all duration-200 px-5 py-3 rounded-lg cursor-pointer group relative">
+        <button class="absolute top-2 right-2 hidden group-hover:inline-block transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
+        <div class="flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 group-hover:hidden transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12.186 14.552c-.617 0-.977.587-.977 1.373 0 .791.371 1.35.983 1.35.617 0 .971-.588.971-1.374 0-.726-.348-1.349-.977-1.349z"></path>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM9.155 17.454c-.426.354-1.073.521-1.864.521-.475 0-.81-.03-1.038-.06v-3.971a8.16 8.16 0 0 1 1.235-.083c.768 0 1.266.138 1.655.432.42.312.684.81.684 1.522 0 .775-.282 1.309-.672 1.639zm2.99.546c-1.2 0-1.901-.906-1.901-2.058 0-1.211.773-2.116 1.967-2.116 1.241 0 1.919.929 1.919 2.045-.001 1.325-.805 2.129-1.985 2.129zm4.655-.762c.275 0 .581-.061.762-.132l.138.713c-.168.084-.546.174-1.037.174-1.397 0-2.117-.869-2.117-2.021 0-1.379.983-2.146 2.207-2.146.474 0 .833.096.995.18l-.186.726a1.979 1.979 0 0 0-.768-.15c-.726 0-1.29.438-1.29 1.338 0 .809.48 1.318 1.296 1.318zM14 9h-1V4l5 5h-4z"></path>
+                <path d="M7.584 14.563c-.203 0-.335.018-.413.036v2.645c.078.018.204.018.317.018.828.006 1.367-.449 1.367-1.415.006-.84-.485-1.284-1.271-1.284z"></path>
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 hidden group-hover:inline-block transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.61 5.757 9.149 3.609 9.792 2 11.82 2 14c0 2.657 2.089 4.815 4.708 4.971V19H17.99v-.003L18 19c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888zM8 12h3V9h2v3h3l-4 5-4-5z"></path>
+            </svg>
+
+        </div>
+        <p class="text-center text-wrap text-ellipsis text-xs font-semibold text-steelBlue">{{ fileDetails.name }}</p>
+    </div>
+}
+
+@else if (fileDetails.type === FileType.ARCHIVE) {
+    <div (click)="onFileClick()" class="overflow-hidden flex flex-col gap-3 h-full w-60 justify-center bg-transparent hover:bg-gray-100 transition-all duration-200 px-5 py-3 rounded-lg cursor-pointer group relative">
+        <button class="absolute top-2 right-2 hidden group-hover:inline-block transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
+        <div class="flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 group-hover:hidden transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6h-3v2H9v2h2v2H9v2h2v8H7v-6h2v-2H7V8h2V6H7V4h2V2H6zm7 2 5 5h-5V4z"></path>
+                <path d="M8 15h2v2H8z"></path>
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 hidden group-hover:inline-block transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.61 5.757 9.149 3.609 9.792 2 11.82 2 14c0 2.657 2.089 4.815 4.708 4.971V19H17.99v-.003L18 19c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888zM8 12h3V9h2v3h3l-4 5-4-5z"></path>
+            </svg>
+
+        </div>
+        <p class="text-center text-wrap text-ellipsis text-xs font-semibold text-steelBlue">{{ fileDetails.name }}</p>
+    </div>
+}
+
+@else if (fileDetails.type === FileType.EXECUTABLE) {
+    <div (click)="onFileClick()" class="overflow-hidden flex flex-col gap-3 h-full w-60 justify-center bg-transparent hover:bg-gray-100 transition-all duration-200 px-5 py-3 rounded-lg cursor-pointer group relative">
+        <button class="absolute top-2 right-2 hidden group-hover:inline-block transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
+        <div class="flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 group-hover:hidden transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M21.993 7.95a.96.96 0 0 0-.029-.214c-.007-.025-.021-.049-.03-.074-.021-.057-.04-.113-.07-.165-.016-.027-.038-.049-.057-.075-.032-.045-.063-.091-.102-.13-.023-.022-.053-.04-.078-.061-.039-.032-.075-.067-.12-.094-.004-.003-.009-.003-.014-.006l-.008-.006-8.979-4.99a1.002 1.002 0 0 0-.97-.001l-9.021 4.99c-.003.003-.006.007-.011.01l-.01.004c-.035.02-.061.049-.094.073-.036.027-.074.051-.106.082-.03.031-.053.067-.079.102-.027.035-.057.066-.079.104-.026.043-.04.092-.059.139-.014.033-.032.064-.041.1a.975.975 0 0 0-.029.21c-.001.017-.007.032-.007.05V16c0 .363.197.698.515.874l8.978 4.987.001.001.002.001.02.011c.043.024.09.037.135.054.032.013.063.03.097.039a1.013 1.013 0 0 0 .506 0c.033-.009.064-.026.097-.039.045-.017.092-.029.135-.054l.02-.011.002-.001.001-.001 8.978-4.987c.316-.176.513-.511.513-.874V7.998c0-.017-.006-.031-.007-.048zm-10.021 3.922L5.058 8.005 7.82 6.477l6.834 3.905-2.682 1.49zm.048-7.719L18.941 8l-2.244 1.247-6.83-3.903 2.153-1.191zM13 19.301l.002-5.679L16 11.944V15l2-1v-3.175l2-1.119v5.705l-7 3.89z"></path>
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 hidden group-hover:inline-block transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.61 5.757 9.149 3.609 9.792 2 11.82 2 14c0 2.657 2.089 4.815 4.708 4.971V19H17.99v-.003L18 19c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888zM8 12h3V9h2v3h3l-4 5-4-5z"></path>
+            </svg>
+
+        </div>
+        <p class="text-center text-wrap text-ellipsis text-xs font-semibold text-steelBlue">{{ fileDetails.name }}</p>
+    </div>
+}
+@else {
+    <div (click)="onFileClick()" class="overflow-hidden flex flex-col gap-3 h-full w-60 justify-center bg-transparent hover:bg-gray-100 transition-all duration-200 px-5 py-3 rounded-lg cursor-pointer group relative">
+        <button class="absolute top-2 right-2 hidden group-hover:inline-block transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M12 10c-1.1 0-2 .9-2 2s .9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+            </svg>
+        </button>
+        <div class="flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 group-hover:hidden transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm8 7h-1V4l5 5h-4z"></path>
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-cyan w-24 h-24 hidden group-hover:inline-block transition duration-200"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.61 5.757 9.149 3.609 9.792 2 11.82 2 14c0 2.657 2.089 4.815 4.708 4.971V19H17.99v-.003L18 19c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888zM8 12h3V9h2v3h3l-4 5-4-5z"></path>
+            </svg>
+
+        </div>
+        <p class="text-center text-wrap text-ellipsis text-xs font-semibold text-steelBlue">{{ fileDetails.name }}</p>
+    </div>
+}
+
+
+
+
+

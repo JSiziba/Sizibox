@@ -10,7 +10,10 @@
         </button>
     </div>
     <div *ngIf="folders" class="flex flex-col mt-14">
-        <div *ngFor="let folder of folders" class="px-5 py-1 cursor-pointer text-white hover:bg-hippieBlue transition duration-150 text-base">
+        <div *ngFor="let folder of folders"
+             (click)="selectFolder(folder)"
+             class="px-5 py-1 cursor-pointer text-white hover:bg-hippieBlue transition duration-150 text-base"
+             [ngClass]="{'bg-hippieBlue': selectedFolder && selectedFolder.id === folder.id}">
             {{ folder.name }}
         </div>
     </div>
