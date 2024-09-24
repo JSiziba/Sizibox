@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpUtilsService } from '../../services/http-utils.service';
 import { FileDetails } from '../../models/file-details';
 import { FileCardComponent } from './components/file-card/file-card.component';
 import { NgForOf, NgIf } from '@angular/common';
-import { CentralStoreService } from '../../services/central-store.service';
 import { MediaPlayerComponent } from './components/media-player/media-player.component';
 import { Router } from '@angular/router';
 import { FileType } from '../../models/file-type';
+import { Store } from '@ngrx/store';
+import { selectFiles, selectFilesLoading } from '../../store/selectors';
+import { selectSubFolder } from '../../store/actions';
+import { AddMenuComponent } from '../../add-menu/add-menu.component';
 
 @Component({
     selector: 'app-central-window',
@@ -15,39 +18,24 @@ import { FileType } from '../../models/file-type';
         FileCardComponent,
         NgForOf,
         MediaPlayerComponent,
-        NgIf
+        NgIf,
+        AddMenuComponent
     ],
     templateUrl: './central-window.component.html',
     styleUrl: './central-window.component.scss'
 })
-export class CentralWindowComponent implements OnInit {
-    protected files?: FileDetails[];
+export class CentralWindowComponent {
+    protected filesSignal = this.store.selectSignal(selectFiles);
+    protected filesLoadingSignal = this.store.selectSignal(selectFilesLoading);
     protected selectedFile?: FileDetails;
     protected showMediaPlayer: boolean = false;
 
     constructor(
         private readonly httpUtils: HttpUtilsService,
-        private readonly centralStore: CentralStoreService,
-        protected router: Router
-    ) { }
+        protected router: Router,
+        protected store: Store
+    ) {
 
-    ngOnInit(): void {
-        this.centralStore.selectedFolderPath$.subscribe((folderPath) => {
-            if (folderPath) {
-                this.getFileDetails(folderPath.path);
-            }
-        });
-        this.centralStore.breadcrumbs$.subscribe((breadcrumbs) => {
-            if (breadcrumbs.length > 0) {
-                this.getFileDetails(breadcrumbs[breadcrumbs.length - 1].path);
-            }
-        });
-    }
-
-    private getFileDetails(filePath: string): void {
-        this.httpUtils.getFilesInFolder(filePath).subscribe((files) => {
-            this.files = files;
-        });
     }
 
     protected onFileClicked($event: FileDetails) {
@@ -65,7 +53,6 @@ export class CentralWindowComponent implements OnInit {
     }
 
     private openFolder(folder: FileDetails) {
-        this.centralStore.addBreadcrumbs([folder]);
-        this.showMediaPlayer = false;
+        this.store.dispatch(selectSubFolder({ subFolder: folder }));
     }
 }

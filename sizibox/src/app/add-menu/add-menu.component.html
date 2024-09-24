@@ -1,0 +1,96 @@
+<div (click)="showAddOptionsMenu()" *ngIf="showFabFlag"
+    class="px-8 py-4 flex gap-1 items-center justify-center rounded-3xl bg-cyan text-white text-sm font-medium shadow-2xl cursor-pointer absolute right-4 bottom-14">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="text-white"
+         fill="currentColor"
+         width="24"
+         height="24"
+         viewBox="0 0 24 24">
+        <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"></path>
+    </svg>
+    <span>Add</span>
+</div>
+
+
+<div *ngIf="showAddOptionsMenuFlag" class="absolute bottom-0 left-0 z-40 h-full w-full top-0 flex flex-col justify-end bg-transparent" (click)="showFab()">
+    <div class="h-fit w-full bg-cyan flex items-center justify-center gap-10 rounded-t-xl shadow-2xl py-16 px-8"
+    (click)="$event.stopPropagation()">
+        <div class="flex flex-col items-center gap-1 cursor-pointer"
+             (click)="showAddFolder()">
+            <div class="p-2 w-fit h-fit rounded-full bg-transparent border border-white">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="text-white w-4 h-4"
+                     fill="currentColor"
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24">
+                    <path d="M20 5h-9.586L8.707 3.293A.997.997 0 0 0 8 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zm-4 9h-3v3h-2v-3H8v-2h3V9h2v3h3v2z"></path>
+                </svg>
+            </div>
+            <p class="text-xs font-normal text-white">Add Folder</p>
+        </div>
+        <div class="flex flex-col items-center gap-1 cursor-pointer"
+             (click)="showUploadFiles()">
+            <div class="p-2 w-fit h-fit rounded-full bg-transparent border border-white">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="text-white w-4 h-4"
+                     fill="currentColor"
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24">
+                    <path d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5h11c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888zM13 14v3h-2v-3H8l4-5 4 5h-3z"></path>
+                </svg>
+            </div>
+            <p class="text-xs font-normal text-white">Upload File</p>
+        </div>
+    </div>
+</div>
+
+<div (click)="showFab()" *ngIf="showAddFolderFlag" class="fixed h-screen w-screen z-40 top-0 left-0 bg-darkEbony bg-opacity-65 flex items-center justify-center">
+    <div (click)="$event.stopPropagation()" class="w-[80%] text-gray-500 lg:w-[40%] bg-white py-4 px-8 rounded-lg shadow-lg overflow-hidden flex flex-col items-center gap-5">
+        <h2 class="font-medium text-lg">Add New Folder</h2>
+        <p class="text-sm font-normal">
+            Add a new folder to {{ currentPathSignal()?.name }}.
+        </p>
+        <p *ngIf="errorMessage" class="text-red-600 font-medium text-sm">{{ errorMessage }}</p>
+        <input [(ngModel)]="folderName" class="px-3 py-2 rounded outline-0 border border-gray-400 text-sm font-medium w-full" placeholder="Folder name" type="text">
+        <div class="flex gap-5 justify-center mb-10">
+            <button (click)="showFab()" class="px-8 py-2 bg-gray-400 border border-gray-400 text-sm rounded shadow text-white">Cancel</button>
+            <button (click)="submitFolder()" class="px-8 py-2 bg-transparent border border-gray-400 text-sm rounded shadow transition-all duration-300" [ngClass]="{'bg-cyan text-white border-cyan': folderName}">Submit</button>
+        </div>
+    </div>
+</div>
+
+<div (click)="showFab()" *ngIf="showUploadFilesFlag" class="fixed h-screen w-screen z-40 top-0 left-0 bg-darkEbony bg-opacity-65 flex items-center justify-center">
+    <div (click)="$event.stopPropagation()" class="w-[80%] text-gray-500 lg:w-[40%] bg-white py-4 px-8 rounded-lg shadow-lg overflow-hidden flex flex-col items-center gap-5">
+        <h2 class="font-medium text-lg">Upload Files</h2>
+        <p class="text-sm font-normal">
+            Upload files to {{ currentPathSignal()?.name }}.
+        </p>
+
+        <div class="p-3 border border-gray-300 bg-gray-300 cursor-pointer rounded-lg flex flex-col gap-5 items-center justify-center overflow-hidden w-full h-44" (click)="fileInput.click()">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-500 w-8 h-8"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M11 15h2V9h3l-4-5-4 5h3z"></path>
+                <path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z"></path>
+            </svg>
+            <input #fileInput class="h-full w-full rounded-xl text-white hidden" type="file" multiple (change)="onFilesSelected($event)"/>
+            <p class="text-sm font-medium">{{ selectedFiles.length }} files selected</p>
+        </div>
+
+        <p *ngIf="errorMessage" class="text-red-600 font-medium text-sm">{{ errorMessage }}</p>
+
+        <div class="flex gap-5 justify-center mb-10">
+            <button (click)="showFab()" class="px-8 py-2 bg-gray-400 border border-gray-400 text-sm rounded shadow text-white">Cancel</button>
+            <button (click)="submitFiles()" class="px-8 py-2 bg-transparent border border-gray-400 text-sm rounded shadow transition-all duration-300" [ngClass]="{'bg-cyan text-white border-cyan': selectedFiles.length}">Submit</button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="fixed h-screen w-screen z-50 top-0 left-0 bg-darkEbony bg-opacity-65 flex items-center justify-center">
+    <div class="lds-ring text-gray-400"><div></div><div></div><div></div><div></div></div>
+</div>

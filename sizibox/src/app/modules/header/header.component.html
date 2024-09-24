@@ -1,20 +1,29 @@
-<div class="bg-greyBg h-16 flex justify-between items-center px-6">
+<div class="bg-greyBg h-16 justify-between items-center px-6 hidden lg:flex">
     <div class="flex gap-10 items-center">
-        <button class="flex gap-3 items-center bg-steelBlue rounded-lg px-2 py-1 text-white">
-            <img ngSrc="assets/images/icon_filter.svg" width="24" height="24" alt="Filter" />
-            <span class=" text-base font-medium">Filter</span>
-            <img class="h-[12px] w-[12px]" ngSrc="assets/images/icon_clear.svg" width="24" height="24" alt="clear"/>
-        </button>
-        <div class="flex gap-1 items-center text-darkEbony font-bold text-xs">
-            <span class="cursor-pointer" (click)="clearBreadcrumbs()">/{{ (centralStoreService.selectedFolderPath$ | async)?.name }}</span>
-            <span *ngIf="breadcrumbs.length > 5" class="">...</span>
-            <span [title]="entry.name" (click)="navigateToBreadcrumbsEntry(entry)" *ngFor="let entry of breadcrumbs | slice:-5" class="cursor-pointer underline text-steelBlue">
-                /{{ entry.name.slice(0, 8) }}
-            </span>
-        </div>
+        <app-breadcrumbs></app-breadcrumbs>
     </div>
     <div class="border border-steelBlue h-[2.5rem] w-[23rem] rounded-lg flex items-center px-4 gap-3 focus-within:shadow-xl focus-within:rounded-3xl transition-all duration-300">
         <img ngSrc="assets/images/icon_search.svg" width="24" height="24" alt="Search"/>
         <input class="w-full bg-transparent h-full outline-0 text-steelBlue text-xs font-medium" placeholder="Search..." type="text">
     </div>
 </div>
+
+<div class="inline-block lg:hidden bg-darkEbony h-16 w-full shadow">
+    <div class="flex h-full w-full p-2 justify-between items-center gap-5">
+        <img class="w-12" src="assets/images/app_logo.png" alt="" srcset="">
+        <app-breadcrumbs></app-breadcrumbs>
+        <div class="w-full"></div>
+        <button (click)="toggleMobileMenu()" class="">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="text-gray-300 w-6 h-6"
+                 fill="currentColor"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24">
+                <path d="M4 6h16v2H4zm4 5h12v2H8zm5 5h7v2h-7z"></path>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<app-mobile-menu *ngIf="showMobileMenuFlag" (close)="toggleMobileMenu()"></app-mobile-menu>

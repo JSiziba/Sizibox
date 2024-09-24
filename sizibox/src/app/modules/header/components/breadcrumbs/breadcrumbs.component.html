@@ -1,0 +1,7 @@
+<div class="flex gap-1 items-center text-gray-200 lg:text-darkEbony font-bold text-xs">
+    <span (click)="selectRootFolder()" class="cursor-pointer">{{ rootFolderSignal()?.name }}/</span>
+    <span *ngIf="breadcrumbSignal().length > 5" class="">...</span>
+    <span (click)="selectBreadcrumbsEntryItem(entry)" [title]="entry.name"  *ngFor="let entry of breadcrumbSignal() | slice:-5" class="cursor-pointer underline text-steelBlue">
+                /{{ entry.name.slice(0, 8) }}
+            </span>
+</div>

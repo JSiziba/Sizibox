@@ -13,11 +13,12 @@ import { FileType } from '../../../../models/file-type';
     templateUrl: './media-player.component.html',
     styleUrl: './media-player.component.scss'
 })
-export class MediaPlayerComponent implements OnInit {
+export class MediaPlayerComponent {
     @Input() fileDetails!: FileDetails;
     @Output() close = new EventEmitter<null>();
     protected readonly FileType = FileType;
     protected countDownTimer = 0;
+    protected controlsHover: boolean = false;
 
     constructor(
         private readonly httpUtils: HttpUtilsService,
@@ -33,17 +34,13 @@ export class MediaPlayerComponent implements OnInit {
         return this.httpUtils.getStreamPath(this.fileDetails.path);
     }
 
-    ngOnInit(): void {
-
-    }
-
     protected onMouseMove() {
         if (this.countDownTimer === 0){
-            this.countDownTimer = 5;
+            this.countDownTimer = 1;
             this.countDown();
             return;
         }
-        this.countDownTimer = 5;
+        this.countDownTimer = 1;
     }
 
     protected countDown() {

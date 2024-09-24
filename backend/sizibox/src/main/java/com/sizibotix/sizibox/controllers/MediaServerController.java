@@ -1,6 +1,7 @@
 package com.sizibotix.sizibox.controllers;
 
 import com.sizibotix.sizibox.models.FileDetails;
+import com.sizibotix.sizibox.models.FolderRequest;
 import com.sizibotix.sizibox.services.FilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -129,6 +130,12 @@ public class MediaServerController {
     @PutMapping("/renameFile")
     public ResponseEntity<FileDetails> renameFile(@RequestParam String path, @RequestParam String newName) {
         FileDetails fileDetails = filesService.renameFile(path, newName);
+        return ResponseEntity.ok(fileDetails);
+    }
+
+    @PostMapping("/add-new-folder")
+    public ResponseEntity<FileDetails> createNewFolder(@RequestBody FolderRequest folderRequest) {
+        FileDetails fileDetails = filesService.createFolder(folderRequest);
         return ResponseEntity.ok(fileDetails);
     }
 }

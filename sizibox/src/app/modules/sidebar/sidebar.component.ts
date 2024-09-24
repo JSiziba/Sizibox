@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { HttpUtilsService } from '../../services/http-utils.service';
 import { FolderPath } from '../../models/folder-path';
-import { CentralStoreService } from '../../services/central-store.service';
+import { Store } from '@ngrx/store';
+import { selectFolders, selectSelectedPath } from '../../store/selectors';
+import { selectFolder } from '../../store/actions';
 
 @Component({
     selector: 'app-sidebar',
@@ -16,28 +18,17 @@ import { CentralStoreService } from '../../services/central-store.service';
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent implements OnInit{
-    protected folders?: FolderPath[];
-    protected selectedFolder?: FolderPath;
+export class SidebarComponent {
+    protected foldersSignal = this.store.selectSignal(selectFolders);
+    protected selectedFolderSignal = this.store.selectSignal(selectSelectedPath);
 
     constructor(
         private readonly httpUtils: HttpUtilsService,
-        private readonly centralStore: CentralStoreService
-    ) {}
-
-    ngOnInit(): void {
-        this.httpUtils
-            .getFolderPaths()
-            .subscribe((folders) => this.folders = folders);
-
-        this.centralStore.selectedFolderPath$.subscribe((folder) => {
-            this.selectedFolder = folder;
-        });
+        private readonly store: Store
+    ) {
     }
 
     protected selectFolder(folder: FolderPath): void {
-        this.selectedFolder = folder;
-        this.centralStore.selectedFolderPath$.next(folder);
-        this.centralStore.clearBreadcrumbs();
+        this.store.dispatch(selectFolder({ folder }));
     }
 }

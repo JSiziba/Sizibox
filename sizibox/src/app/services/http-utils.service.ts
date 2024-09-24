@@ -1,30 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { FolderPath } from '../models/folder-path';
 import { FileDetails } from '../models/file-details';
 import { FileType } from '../models/file-type';
-import { CentralStoreService } from './central-store.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HttpUtilsService {
-    // public readonly baseUrl = "http://localhost:7521"
-    public readonly baseUrl = "http://192.168.100.10:5000"
-
+    public readonly baseUrl = environment.baseUrl;
 
     constructor(
-        private http: HttpClient,
-        private centralStore: CentralStoreService
+        private http: HttpClient
     ) { }
 
     public getFolderPaths(): Observable<FolderPath[]> {
-        return this.http.get<FolderPath[]>(`${this.baseUrl}/folder-paths`).pipe(
-            tap((folders) => {
-                folders.length > 0 && this.centralStore.folderPaths$.next(folders);
-            })
-        );
+        return this.http.get<FolderPath[]>(`${this.baseUrl}/folder-paths`);
     }
 
     public getFilesInFolder(folderPath: string): Observable<FileDetails[]> {
@@ -53,13 +46,11 @@ export class HttpUtilsService {
 
     // edit folder path
 
-    // upload file
-
-    // upload files
-
     // rename file
 
     // delete file
+
+
     public getDownloadPath(path: string) {
         const pathEncoded = encodeURIComponent(path);
         return `${this.baseUrl}/media-server/download?path=${pathEncoded}`;
@@ -68,5 +59,15 @@ export class HttpUtilsService {
     public getStreamPath(path: string) {
         const pathEncoded = encodeURIComponent(path);
         return `${this.baseUrl}/media-server/stream-media?path=${pathEncoded}`;
+    }
+
+    public uploadFiles(formData: FormData, path: string): Observable<FileDetails[]> {
+        return this.http.post<FileDetails[]>(`${this.baseUrl}/media-server/uploadFiles`, formData, {
+            params: { path }
+        });
+    }
+
+    public addNewFolder(folderName: string, path: string): Observable<FileDetails> {
+        return this.http.post<FileDetails>(`${this.baseUrl}/media-server/add-new-folder`, { folderName, path });
     }
 }

@@ -1,0 +1,25 @@
+<div class="bg-transparent z-50 absolute h-screen w-screen flex justify-end top-0 right-0"
+(click)="closeMenu()">
+    <div class="bg-darkEbony h-full w-1/2 shadow px-2 py-5"
+    (click)="$event.stopPropagation()">
+        <div class="w-full flex justify-end">
+            <button (click)="closeMenu()" class="">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="text-gray-300 w-6 h-6"
+                     fill="currentColor"
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24">
+                    <path d="M4 11h12v2H4zm0-5h16v2H4zm0 12h7.235v-2H4z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="py-12 text-gray-300 text-sm font-normal flex flex-col gap-1">
+            <div class="px-2 active relative" *ngFor="let folder of foldersSignal()"
+                 [ngClass]="{'active': selectedFolderSignal() && selectedFolderSignal()?.id === folder.id}"
+                 (click)="selectFolder(folder)">
+                {{ folder.name }}
+            </div>
+        </div>
+    </div>
+</div>

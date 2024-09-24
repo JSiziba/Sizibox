@@ -2,6 +2,7 @@ package com.sizibotix.sizibox.services;
 
 
 import com.sizibotix.sizibox.models.FileDetails;
+import com.sizibotix.sizibox.models.FolderRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,6 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class FilesService {
-//    private static final String MEDIA_SERVER_PATH = "/home/su/Documents/t-1000";
-//    private static final String MEDIA_SERVER_PATH = "C:\\Users\\JohnsonS\\Documents";
-
 
     public List<FileDetails> getFiles(String folderPath) {
         List<FileDetails> fileDetailsList = new ArrayList<>();
@@ -36,16 +34,6 @@ public class FilesService {
                 }
             }
         }
-
-//        fileDetailsList.sort((f1, f2) -> {
-//            if (f1.getType().equals("Folder") && f2.getType().equals("File")) {
-//                return -1;
-//            } else if (f1.getType().equals("File") && f2.getType().equals("Folder")) {
-//                return 1;
-//            } else {
-//                return f1.getName().compareTo(f2.getName());
-//            }
-//        });
 
         return fileDetailsList;
     }
@@ -86,11 +74,9 @@ public class FilesService {
         }
 
         try {
-            // Ensure the directory exists
             Path destinationPath = Paths.get(path).toAbsolutePath().normalize();
             Files.createDirectories(destinationPath);
 
-            // Save the file
             Path targetLocation = destinationPath.resolve(Objects.requireNonNull(multipartFile.getOriginalFilename()));
             multipartFile.transferTo(targetLocation.toFile());
 
@@ -111,7 +97,6 @@ public class FilesService {
             throw new IllegalArgumentException("File not found");
         }
 
-        // if directory, delete all files in the directory and then delete the directory
         if(file.isDirectory()) {
             File[] files = file.listFiles();
             if(files != null) {
@@ -119,7 +104,6 @@ public class FilesService {
                     deleteFile(f.getAbsolutePath());
                 }
             }
-            // delete the directory
             if(!file.delete()) {
                 message = "Failed to delete directory";
             }
@@ -129,7 +113,6 @@ public class FilesService {
             }
         }
 
-        // if file, delete the file
         else {
             if(!file.delete()) {
                 message = "Failed to delete file";
@@ -162,6 +145,21 @@ public class FilesService {
         }
         else {
             throw new IllegalArgumentException("Failed to rename file");
+        }
+    }
+
+    public FileDetails createFolder(FolderRequest folderRequest) {
+        File folder = new File(folderRequest.getPath() + File.separator + folderRequest.getFolderName());
+        if(folder.exists()) {
+            throw new IllegalArgumentException("Folder already exists");
+        }
+
+        if(folder.mkdir()) {
+            log.info("Folder created: {}", folder.getAbsolutePath());
+            return FileDetails.fromFile(folder);
+        }
+        else {
+            throw new IllegalArgumentException("Failed to create folder");
         }
     }
 }

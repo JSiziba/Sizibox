@@ -1,7 +1,15 @@
-<div class="h-full p-6 overflow-y-auto flex gap-2 gap-y-14 flex-wrap central-window">
-    <app-file-card (fileClicked)="onFileClicked($event)" class="" *ngFor="let file of files" [fileDetails]="file"></app-file-card>
-</div>
+@if (!filesLoadingSignal()) {
+    <div class="central-window overflow-y-auto h-full">
+        <div class="h-fit p-6 overflow-y-auto flex gap-2 gap-y-14 flex-col lg:flex-row items-center lg:items-start lg:flex-wrap pb-6">
+            <app-file-card (fileClicked)="onFileClicked($event)" class="" *ngFor="let file of filesSignal()" [fileDetails]="file"></app-file-card>
+        </div>
+    </div>
 
-<app-media-player (close)="showMediaPlayer = false"
-                  *ngIf="showMediaPlayer && selectedFile"
-                  [fileDetails]="selectedFile"></app-media-player>
+    <app-media-player (close)="showMediaPlayer = false"
+                      *ngIf="showMediaPlayer && selectedFile"
+                      [fileDetails]="selectedFile"></app-media-player>
+} @else {
+    <div class="h-full w-full flex justify-center items-center">
+        <div class="lds-ring text-gray-400"><div></div><div></div><div></div><div></div></div>
+    </div>
+}

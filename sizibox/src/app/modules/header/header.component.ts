@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncPipe, NgForOf, NgIf, NgOptimizedImage, SlicePipe } from '@angular/common';
-import { FileDetails } from '../../models/file-details';
-import { CentralStoreService } from '../../services/central-store.service';
+import { Store } from '@ngrx/store';
+import { selectBreadcrumbs, selectSelectedPath } from '../../store/selectors';
+import { MobileMenuComponent } from './components/mobile-menu/mobile-menu.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 
 @Component({
     selector: 'app-header',
@@ -11,30 +13,22 @@ import { CentralStoreService } from '../../services/central-store.service';
         NgForOf,
         AsyncPipe,
         SlicePipe,
-        NgIf
+        NgIf,
+        MobileMenuComponent,
+        BreadcrumbsComponent
     ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
-    protected breadcrumbs: FileDetails[] = [];
+export class HeaderComponent {
+    protected showMobileMenuFlag: boolean = false;
 
     constructor(
-        protected centralStoreService: CentralStoreService
+        private readonly store: Store
     ) {
     }
 
-    ngOnInit(): void {
-        this.centralStoreService.breadcrumbs$.subscribe((breadcrumbs) => {
-            this.breadcrumbs = breadcrumbs;
-        });
-    }
-
-    protected navigateToBreadcrumbsEntry(file: FileDetails): void {
-        this.centralStoreService.navigateToBreadcrumbsEntry(file);
-    }
-
-    protected clearBreadcrumbs() {
-        this.centralStoreService.clearBreadcrumbs();
+    protected toggleMobileMenu() {
+        this.showMobileMenuFlag = !this.showMobileMenuFlag;
     }
 }
